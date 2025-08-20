@@ -1,0 +1,24 @@
+{
+  "name": "certifyme-todo-flask",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "fmt": "prettier --write \"templates/**/*.html\" \"static/**/*.{css,js}\"",
+    "fmt:check": "prettier --check \"templates/**/*.html\" \"static/**/*.{css,js}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Roshanbtech/Certifyme-Todo-task.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Roshanbtech/Certifyme-Todo-task/issues"
+  },
+  "homepage": "https://github.com/Roshanbtech/Certifyme-Todo-task#readme",
+  "description": "",
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
