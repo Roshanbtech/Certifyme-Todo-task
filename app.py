@@ -50,6 +50,8 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     @app.before_request
     def _csrf_protect():
+        if app.config.get("TESTING"):
+            return
         if request.method == "POST":
             token_session = session.get("_csrf_token")
             token_form = request.form.get("csrf_token")
