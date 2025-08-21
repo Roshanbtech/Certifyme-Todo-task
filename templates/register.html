@@ -1,7 +1,4 @@
-{% extends "base.html" %}
-{% block title %}Register · Todo{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Register · Todo{% endblock %} {% block content %}
 <div class="row justify-content-center">
   <div class="col-12 col-md-8 col-lg-6">
     <div class="card">
@@ -12,25 +9,58 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="name" name="name" value="{{ name or '' }}" placeholder="Full name" minlength="2" required />
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              value="{{ name or '' }}"
+              placeholder="Full name"
+              minlength="2"
+              required
+            />
             <label for="name">Full name</label>
           </div>
 
           <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="reg-email" name="email" value="{{ email or '' }}" placeholder="you@example.com" required />
+            <input
+              type="email"
+              class="form-control"
+              id="reg-email"
+              name="email"
+              value="{{ email or '' }}"
+              placeholder="you@example.com"
+              required
+            />
             <label for="reg-email">Email</label>
           </div>
 
           <div class="row g-3">
             <div class="col-md-6">
               <div class="form-floating">
-                <input type="password" class="form-control" id="reg-password" name="password" placeholder="Password" minlength="8" required />
+                <input
+                  type="password"
+                  class="form-control"
+                  id="reg-password"
+                  name="password"
+                  placeholder="Password"
+                  minlength="8"
+                  required
+                />
                 <label for="reg-password">Password</label>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-floating">
-                <input type="password" class="form-control" id="reg-confirm" name="confirm_password" placeholder="Confirm" minlength="8" required />
+                <input
+                  type="password"
+                  class="form-control"
+                  id="reg-confirm"
+                  name="confirm_password"
+                  placeholder="Confirm"
+                  minlength="8"
+                  required
+                />
                 <label for="reg-confirm">Confirm password</label>
               </div>
             </div>
