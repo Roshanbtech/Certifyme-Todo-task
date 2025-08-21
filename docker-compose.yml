@@ -1,13 +1,13 @@
-version: "3.9"
 services:
   web:
     build: .
+    env_file: .env
     ports:
       - "8000:8000"
-    environment:
-      # pick your own strong secret in a local .env file (Compose reads it automatically)
-      SECRET_KEY: ${SECRET_KEY:-dev-secret}
-      DATABASE_URL: sqlite:///data/db.sqlite3
     volumes:
-      - ./data:/app/data   # persist sqlite file outside the container
+      # Named volume stores sqlite db outside the container FS
+      - db-data:/app/data
     restart: unless-stopped
+
+volumes:
+  db-data:

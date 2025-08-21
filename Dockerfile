@@ -1,25 +1,33 @@
 FROM python:3.11-slim-bookworm
 
-# minimal, secure runtime
+# Minimal, predictable runtime
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# install python deps first (better cache)
+# Create unprivileged user and install 'gosu' to drop root at runtime
+RUN adduser --disabled-password --gecos "" appuser \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends gosu \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python deps first (better layer cache)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# copy app code
+# Copy app code
 COPY . .
 
-# non-root user + writable data dir for SQLite
-RUN useradd -ms /bin/bash appuser && mkdir -p /app/data && chown -R appuser:appuser /app
-USER appuser
+# Prepare data dir and script perms
+RUN mkdir -p /app/data \
+    && chown -R appuser:appuser /app \
+    && chmod +x /app/entrypoint.sh
 
-# default DB path inside container (your app already reads DATABASE_URL)
-ENV DATABASE_URL=sqlite:///data/db.sqlite3
+# Persist DB between runs (works with named volumes)
+VOLUME ["/app/data"]
 
 EXPOSE 8000
-CMD ["gunicorn","-w","2","-b","0.0.0.0:8000","wsgi:app"]
+
+# Fix ownership of the mounted volume at runtime, then drop privileges
+ENTRYPOINT ["/app/entrypoint.sh"]
