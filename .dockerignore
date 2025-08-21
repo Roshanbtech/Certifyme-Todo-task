@@ -23,3 +23,12 @@ node_modules/
 .DS_Store
 .vscode/
 .idea/
+
+.git
+.venv
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+data/
+
