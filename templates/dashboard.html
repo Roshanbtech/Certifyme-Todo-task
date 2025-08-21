@@ -1,11 +1,14 @@
-{% extends "base.html" %} {% block title %}Dashboard - Todo App{% endblock %} {% block content %}
+{% extends "base.html" %}
+{% block title %}Dashboard · Todo{% endblock %}
+
+{% block content %}
 <div class="row g-4">
   <!-- Add Task -->
-  <div class="col-lg-6">
-    <div class="card shadow-sm">
+  <div class="col-12 col-lg-5">
+    <div class="card">
       <div class="card-body">
         <h2 class="h5 mb-3">Add Task</h2>
-        <form method="post" novalidate>
+        <form method="post" class="needs-validation" novalidate>
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
           <div class="input-group">
             <input
@@ -18,86 +21,62 @@
             />
             <button class="btn btn-primary" type="submit">Add</button>
           </div>
+          <div class="invalid-feedback d-block">Title is required.</div>
         </form>
       </div>
     </div>
   </div>
 
   <!-- Your Tasks -->
-  <div class="col-lg-6">
-    <div class="card shadow-sm">
+  <div class="col-12 col-lg-7">
+    <div class="card">
       <div class="card-body">
         <h2 class="h5 mb-3">Your Tasks</h2>
 
         {% if todos %}
-        <ul class="list-group todo-list">
-          {% for t in todos %}
-          <li class="list-group-item">
-            <div class="d-flex align-items-center justify-content-between">
-              <!-- toggle complete -->
-              <form method="post" action="{{ url_for('toggle_todo', todo_id=t.id) }}" class="me-3">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    onChange="this.form.submit()"
-                    {%
-                    if
-                    t.is_done
-                    %}checked{%
-                    endif
-                    %}
-                  />
-                  <label class="form-check-label {% if t.is_done %}todo-done{% endif %}">
-                    {{ t.title }}
-                    <small class="text-muted d-block">
-                      Added {{ t.created_at.strftime('%Y-%m-%d %H:%M') }}
-                    </small>
-                  </label>
-                </div>
-              </form>
-
-              <div class="btn-group">
-                <button
-                  class="btn btn-sm btn-outline-secondary"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#edit-{{ t.id }}"
-                >
-                  Edit
-                </button>
-                <form method="post" action="{{ url_for('delete_todo', todo_id=t.id) }}">
+          <ul class="list-group todo-list">
+            {% for t in todos %}
+            <li class="list-group-item">
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <!-- toggle complete -->
+                <form method="post" action="{{ url_for('toggle_todo', todo_id=t.id) }}" class="d-flex align-items-center gap-3 me-auto">
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                  <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                  <div class="form-check m-0">
+                    <input class="form-check-input" id="todo-{{ t.id }}" type="checkbox" onChange="this.form.submit()" {% if t.is_done %}checked{% endif %} />
+                    <label class="form-check-label {% if t.is_done %}todo-done{% endif %}" for="todo-{{ t.id }}">
+                      {{ t.title }}
+                      <small class="text-muted d-block">Added {{ t.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </label>
+                  </div>
+                </form>
+
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#edit-{{ t.id }}">
+                    Edit
+                  </button>
+                  <form method="post" action="{{ url_for('delete_todo', todo_id=t.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                  </form>
+                </div>
+              </div>
+
+              <!-- inline edit form -->
+              <div id="edit-{{ t.id }}" class="collapse mt-3">
+                <form method="post" action="{{ url_for('edit_todo', todo_id=t.id) }}" class="d-flex gap-2 flex-wrap">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                  <input type="text" class="form-control" name="title" value="{{ t.title }}" maxlength="150" required />
+                  <button class="btn btn-success btn-sm" type="submit">Save</button>
                 </form>
               </div>
-            </div>
-
-            <!-- inline edit form -->
-            <div id="edit-{{ t.id }}" class="collapse mt-3">
-              <form
-                method="post"
-                action="{{ url_for('edit_todo', todo_id=t.id) }}"
-                class="d-flex gap-2"
-              >
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                <input
-                  type="text"
-                  class="form-control"
-                  name="title"
-                  value="{{ t.title }}"
-                  maxlength="150"
-                  required
-                />
-                <button class="btn btn-success btn-sm" type="submit">Save</button>
-              </form>
-            </div>
-          </li>
-          {% endfor %}
-        </ul>
+            </li>
+            {% endfor %}
+          </ul>
         {% else %}
-        <p class="text-muted mb-0">No tasks yet. Add your first one!</p>
+          <div class="text-center text-muted py-4">
+            <div class="mb-2">No tasks yet.</div>
+            <small>Add your first one using the form on the left.</small>
+          </div>
         {% endif %}
       </div>
     </div>
