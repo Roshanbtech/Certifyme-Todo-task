@@ -255,9 +255,8 @@ git log -S SECRET_KEY --oneline
 
 Place a screenshot at `docs/screenshot-dashboard.png` and it will render below:
 
-![Dashboard](docs/screenshot-dashboard.png)
+![Dashboard](static/cert1.jpg)
 
-> If you prefer another path/name, update the Markdown image link accordingly.
 
 ---
 
