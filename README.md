@@ -253,10 +253,7 @@ git log -S SECRET_KEY --oneline
 
 ## Screenshots
 
-Place a screenshot at `docs/screenshot-dashboard.png` and it will render below:
-
 ![Dashboard](static/cert1.jpg)
-
 
 ---
 
